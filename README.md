@@ -10,20 +10,14 @@ An AI-first video studio for creating 3blue1brown-style educational videos focus
    cd ai-video-studio
    ```
 
-2. Create and activate a virtual environment:
+2. Sync the environment with uv:
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   uv sync
    ```
 
-3. Install the package in development mode:
+3. (Optional) Install dev dependencies:
    ```bash
-   pip install -e .
-   ```
-
-   Or install with dev dependencies:
-   ```bash
-   pip install -e ".[dev]"
+   uv sync --extra dev
    ```
 
 4. (Optional) Copy `.env.example` to `.env` and configure any needed environment variables:
@@ -33,16 +27,16 @@ An AI-first video studio for creating 3blue1brown-style educational videos focus
 
 ## Quick Start
 
-**Make sure your virtual environment is activated** (see Installation step 2).
+**Make sure the uv environment is synced** (see Installation step 2).
 
 Render a demo scene:
 ```bash
-python -m ai_video_studio.pipeline.cli render-demo
+uv run python -m ai_video_studio.pipeline.cli render-demo
 ```
 
 Or with low quality for faster rendering:
 ```bash
-python -m ai_video_studio.pipeline.cli render-demo --quality low_quality
+uv run python -m ai_video_studio.pipeline.cli render-demo --quality low_quality
 ```
 
 This will create a simple Manim animation showing a function on axes with a point moving along the curve. The output will be saved to `output/videos/` directory.
@@ -61,6 +55,5 @@ ai_video_studio/
 
 ## Development
 
-- **Always use the virtual environment** when working on this project. See `docs/AGENTS.md` for detailed instructions.
+- **Always use the uv-managed environment** when working on this project. See `docs/AGENTS.md` for detailed instructions.
 - See `docs/AGENT_BACKBONE.md` for the full project specification and roadmap.
-

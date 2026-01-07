@@ -2,51 +2,33 @@
 
 This document provides instructions for AI coding agents working on this project.
 
-## Virtual Environment Setup
+## UV Environment Setup
 
-**Always use the virtual environment when working on this project.**
+**Always use the uv-managed environment when working on this project.**
 
 ### Initial Setup
 
-1. Create a virtual environment (if it doesn't exist):
+1. Sync the environment (creates `.venv` if needed):
    ```bash
-   python3 -m venv venv
+   uv sync
    ```
 
-2. Activate the virtual environment:
+2. Install dev dependencies if needed:
    ```bash
-   source venv/bin/activate
-   ```
-   
-   On Windows:
-   ```bash
-   venv\Scripts\activate
+   uv sync --extra dev
    ```
 
-3. Install the package in editable mode:
-   ```bash
-   pip install -e .
-   ```
+### Working with UV
 
-### Working with the Virtual Environment
-
-- **Always activate the venv before running any commands**
-- All Python commands should be run with the venv activated
-- When installing new dependencies, add them to `pyproject.toml` and run `pip install -e .`
-- The venv is already in `.gitignore`, so it won't be committed
+- **Always use `uv run` for Python commands**
+- When installing new dependencies, add them to `pyproject.toml` and run `uv sync`
+- The `.venv` directory is already in `.gitignore`, so it won't be committed
 
 ### Testing Commands
 
-After activating the venv, you can test the demo scene:
+After syncing, you can test the demo scene:
 ```bash
-python -m ai_video_studio.pipeline.cli render-demo --quality low_quality
-```
-
-### Deactivating
-
-When done working, you can deactivate the virtual environment:
-```bash
-deactivate
+uv run python -m ai_video_studio.pipeline.cli render-demo --quality low_quality
 ```
 
 ## Project Structure
@@ -109,7 +91,7 @@ When processing the GIF for review, evaluate:
 
 ## Development Workflow
 
-1. Activate venv
+1. Run `uv sync`
 2. Make code changes
 3. Test using CLI commands
 4. Render and review video output (create GIF for analysis)
@@ -184,4 +166,3 @@ Camera rotation can cause 3D objects to appear at different screen positions - w
 | `DOWN` shift doesn't move content down visually | `DOWN` is Y-direction, not screen-vertical | Use `np.array([0, 0, -amount])` for Z shift |
 | Overlap varies with camera angle | Camera rotation changes apparent positions | Extract multiple frames to verify separation |
 | Title rotates with scene | Title added normally | Use `add_fixed_in_frame_mobjects(title)` |
-
