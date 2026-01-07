@@ -1,0 +1,5 @@
+{
+  "id": "segment_loss_equals_height",
+  "text": "When we optimize a model's loss, we're really trying to move its parameters downhill on a surface. Lower loss is simply lower height."
+}
+

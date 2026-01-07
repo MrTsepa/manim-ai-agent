@@ -1,0 +1,3 @@
+# This file ensures the agent_workspace directory is tracked by git
+# All other files in this directory should be ignored
+
