@@ -6,7 +6,6 @@ from manim import (
     BLUE,
     Create,
     DOWN,
-    FadeIn,
     GREEN,
     Indicate,
     LEFT,
@@ -19,13 +18,13 @@ from manim import (
     RightAngle,
     Scene,
     Square,
-    Text,
     UP,
     VGroup,
     WHITE,
     Write,
 )
 
+from ai_video_studio.manim_scenes.layouts import setup_titled_2d_scene
 from ai_video_studio.manim_scenes.registry import register_scene
 
 
@@ -45,9 +44,8 @@ class PythagoreanTheoremScene(Scene):
     def construct(self):
         """Create and animate the Pythagorean theorem scene."""
         show_guides = False
-        title = Text("Pythagorean Theorem", font="Menlo", font_size=42)
-        title.to_edge(UP)
-        self.play(FadeIn(title, shift=UP * 0.2), run_time=0.6)
+        # Use the standard 2D title layout
+        setup_titled_2d_scene(self, "Pythagorean Theorem")
 
         a_len = 2.6
         b_len = 3.4

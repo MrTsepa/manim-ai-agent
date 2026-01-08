@@ -3,12 +3,136 @@
 from typing import Optional
 
 from manim import (
+    FadeIn,
     Rectangle,
     Text,
+    UP,
     WHITE,
     Write,
     config,
 )
+
+
+# =============================================================================
+# 2D Scene Layouts
+# =============================================================================
+
+
+class Titled2DSceneLayout:
+    """
+    A layout manager for standard 2D scenes with a title at the top.
+    
+    This provides consistent title styling and animation across all 2D scenes.
+    
+    Usage:
+        class MyScene(Scene):
+            def construct(self):
+                layout = Titled2DSceneLayout(self, title="My Title")
+                layout.setup()
+                
+                # Add your content below the title...
+    """
+    
+    # Layout constants
+    TITLE_FONT = "Menlo"
+    TITLE_FONT_SIZE = 42
+    TITLE_SHIFT = 0.2  # How far title slides in from
+    TITLE_RUN_TIME = 0.6  # Animation duration
+    
+    def __init__(
+        self,
+        scene,  # Scene instance
+        title: str,
+        title_font: str = None,
+        title_color=WHITE,
+        title_font_size: Optional[int] = None,
+    ):
+        """
+        Initialize the titled 2D scene layout.
+        
+        Args:
+            scene: The Manim Scene instance
+            title: The title text to display
+            title_font: Font family for the title (default: Menlo)
+            title_color: Color of the title text
+            title_font_size: Override font size (uses 42 if None)
+        """
+        self.scene = scene
+        self.title_text = title
+        self.title_font = title_font or self.TITLE_FONT
+        self.title_color = title_color
+        self.title_font_size = title_font_size or self.TITLE_FONT_SIZE
+        
+        self._title_mobject = None
+    
+    @property
+    def title(self):
+        """Get the title mobject after setup."""
+        return self._title_mobject
+    
+    def setup(self, animate: bool = True, run_time: float = None):
+        """
+        Set up the layout, creating and optionally animating the title.
+        
+        Args:
+            animate: Whether to animate the title appearance
+            run_time: Animation duration (uses default if None)
+            
+        Returns:
+            The title mobject
+        """
+        run_time = run_time or self.TITLE_RUN_TIME
+        
+        self._title_mobject = Text(
+            self.title_text,
+            font_size=self.title_font_size,
+            color=self.title_color,
+            font=self.title_font,
+        )
+        self._title_mobject.to_edge(UP)
+        
+        if animate:
+            self.scene.play(
+                FadeIn(self._title_mobject, shift=UP * self.TITLE_SHIFT),
+                run_time=run_time,
+            )
+        else:
+            self.scene.add(self._title_mobject)
+        
+        return self._title_mobject
+
+
+def setup_titled_2d_scene(
+    scene,
+    title: str,
+    animate: bool = True,
+    **layout_kwargs
+) -> Titled2DSceneLayout:
+    """
+    Convenience function to set up a titled 2D scene.
+    
+    Args:
+        scene: The Scene instance
+        title: Title text to display
+        animate: Whether to animate the title
+        **layout_kwargs: Additional args passed to Titled2DSceneLayout
+        
+    Returns:
+        Titled2DSceneLayout instance
+        
+    Example:
+        def construct(self):
+            layout = setup_titled_2d_scene(self, "Pythagorean Theorem")
+            # Add your content...
+    """
+    layout = Titled2DSceneLayout(scene, title, **layout_kwargs)
+    layout.setup(animate=animate)
+    return layout
+
+
+# =============================================================================
+# 3D Scene Layouts
+# =============================================================================
 
 
 class TitledSceneLayout:

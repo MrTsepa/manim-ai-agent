@@ -65,7 +65,23 @@ mkdir -p agent_scratchpad/${AGENT_ID:-default}
 
 7) **Conclude the loop**
    - When satisfied, summarize the improvements.
+   - **Provide final deliverables** to the user:
+     - **Video**: Link to the rendered video (e.g., `output/videos/480p15/<Scene>.mp4`)
+     - **GIF**: Link to the review GIF (e.g., `agent_scratchpad/${AGENT_ID}/review.gif`)
+     - **Reference frames**: Links to key frame images showing important moments
+     - **Merge-ready change**: Ensure the code change is clean, tested, and ready to merge
    - Ask the user if they want a higher-quality render.
+
+## Final Deliverables Checklist
+
+Before presenting work to the user, verify you have:
+
+- [ ] Video file path (low-quality render)
+- [ ] Review GIF for quick preview
+- [ ] Reference frames at key timestamps (especially for 3D/animated scenes)
+- [ ] Clean, focused code changes using `@register_scene` decorator
+- [ ] No edits to central files (`cli.py`, `demo_scenes.py`) unless absolutely necessary
+- [ ] Scene file in the correct location (`src/ai_video_studio/manim_scenes/scenes/`)
 
 ## Notes
 

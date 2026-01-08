@@ -13,7 +13,6 @@ from manim import (
     ParametricFunction,
     RIGHT,
     Scene,
-    Text,
     TracedPath,
     UP,
     ValueTracker,
@@ -26,6 +25,7 @@ from manim import (
     YELLOW,
 )
 
+from ai_video_studio.manim_scenes.layouts import setup_titled_2d_scene
 from ai_video_studio.manim_scenes.registry import register_scene
 
 
@@ -44,9 +44,8 @@ class ParabolicMotionScene(Scene):
 
     def construct(self):
         """Create and animate the scene."""
-        title = Text("Parabolic Motion", font="Menlo", font_size=40)
-        title.to_edge(UP)
-        self.play(FadeIn(title, shift=UP * 0.2), run_time=0.6)
+        # Use the standard 2D title layout
+        setup_titled_2d_scene(self, "Parabolic Motion", title_font_size=40)
 
         g = 9.8
         v0 = 6.5
