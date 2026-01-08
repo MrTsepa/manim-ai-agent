@@ -43,11 +43,11 @@ mkdir -p agent_scratchpad/${AGENT_ID:-default}
 4) **Create review artifacts**
    - Use namespaced paths (set `SCRATCH=agent_scratchpad/${AGENT_ID:-default}`):
    - Make a low-res GIF for fast review:
-     - `ffmpeg -i output/videos/480p15/<Scene>.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y $SCRATCH/review.gif`
+     - `ffmpeg -loglevel error -i output/videos/480p15/<Scene>.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y $SCRATCH/review.gif`
    - Extract key frames (e.g., 3s, 6s, 10s) when camera or motion changes:
-     - `ffmpeg -y -ss 00:00:03 -i output/videos/480p15/<Scene>.mp4 -vframes 1 -update 1 $SCRATCH/frame_3s.png`
-     - `ffmpeg -y -ss 00:00:06 -i output/videos/480p15/<Scene>.mp4 -vframes 1 -update 1 $SCRATCH/frame_6s.png`
-     - `ffmpeg -y -ss 00:00:10 -i output/videos/480p15/<Scene>.mp4 -vframes 1 -update 1 $SCRATCH/frame_10s.png`
+     - `ffmpeg -loglevel error -y -ss 00:00:03 -i output/videos/480p15/<Scene>.mp4 -vframes 1 -update 1 $SCRATCH/frame_3s.png`
+     - `ffmpeg -loglevel error -y -ss 00:00:06 -i output/videos/480p15/<Scene>.mp4 -vframes 1 -update 1 $SCRATCH/frame_6s.png`
+     - `ffmpeg -loglevel error -y -ss 00:00:10 -i output/videos/480p15/<Scene>.mp4 -vframes 1 -update 1 $SCRATCH/frame_10s.png`
 
 5) **Self-critique**
    - Review the GIF and frames carefully for:

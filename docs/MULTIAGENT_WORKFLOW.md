@@ -28,12 +28,12 @@ Instead of writing directly to `agent_scratchpad/`, use:
 mkdir -p agent_scratchpad/${AGENT_ID:-default}
 
 # Write review artifacts to your namespace
-ffmpeg -i output/videos/480p15/MyScene.mp4 \
+ffmpeg -loglevel error -i output/videos/480p15/MyScene.mp4 \
   -vf "fps=10,scale=320:-1:flags=lanczos" \
   -y agent_scratchpad/${AGENT_ID:-default}/review.gif
 
 # Extract frames to your namespace
-ffmpeg -y -ss 00:00:03 -i output/videos/480p15/MyScene.mp4 \
+ffmpeg -loglevel error -y -ss 00:00:03 -i output/videos/480p15/MyScene.mp4 \
   -vframes 1 -update 1 agent_scratchpad/${AGENT_ID:-default}/frame_3s.png
 ```
 

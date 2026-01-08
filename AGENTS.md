@@ -109,7 +109,7 @@ SCRATCH=agent_scratchpad/${AGENT_ID:-default}
 mkdir -p $SCRATCH
 
 # Convert video to low-res GIF for review (recommended: 320px width, 10fps)
-ffmpeg -i output/videos/480p15/YourScene.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y $SCRATCH/review.gif
+ffmpeg -loglevel error -i output/videos/480p15/YourScene.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y $SCRATCH/review.gif
 ```
 
 ### What to Review
@@ -206,9 +206,9 @@ When reviewing 3D scenes, extract **multiple frames at different timestamps** to
 
 ```bash
 # Extract frames at 3s, 6s, 10s to check different camera angles
-ffmpeg -y -ss 00:00:03 -i video.mp4 -vframes 1 -update 1 frame_3s.png
-ffmpeg -y -ss 00:00:06 -i video.mp4 -vframes 1 -update 1 frame_6s.png
-ffmpeg -y -ss 00:00:10 -i video.mp4 -vframes 1 -update 1 frame_10s.png
+ffmpeg -loglevel error -y -ss 00:00:03 -i video.mp4 -vframes 1 -update 1 frame_3s.png
+ffmpeg -loglevel error -y -ss 00:00:06 -i video.mp4 -vframes 1 -update 1 frame_6s.png
+ffmpeg -loglevel error -y -ss 00:00:10 -i video.mp4 -vframes 1 -update 1 frame_10s.png
 ```
 
 Camera rotation can cause 3D objects to appear at different screen positions - what looks separated in one frame may overlap in another.

@@ -1,4 +1,6 @@
 version: 1
+notes:
+  - "Do not reference agent_scratchpad in this library. It is temporary and not stable across sessions."
 reference_scenes:
   - id: parabolic_motion_v1
     title: "Parabolic Motion"
@@ -44,3 +46,30 @@ reference_scenes:
       review_frames:
         - "samples_artifacts/pythagorean_frame_2s.png"
         - "samples_artifacts/pythagorean_frame_5s.png"
+  - id: secant_to_derivative_v1
+    title: "Secant → Derivative"
+    scene_class: "SecantToDerivativeScene"
+    module: "ai_video_studio.manim_scenes.scenes.secant_to_derivative"
+    source_file: "src/ai_video_studio/manim_scenes/scenes/secant_to_derivative.py"
+    tags:
+      - calculus
+      - secant
+      - derivative
+      - layout:side-by-side
+      - title:top-center
+      - text:explanatory
+      - plot:dynamic
+    quality_notes:
+      - "Left explanatory text block fades in as a unit with uniform line spacing."
+      - "Left block is vertically centered between title and bottom edge for balanced composition."
+      - "Plot shifted down and slightly left to avoid title collisions at maximum extent."
+      - "Δx/Δy brackets anchored to axes with offsets to avoid tick label overlap."
+      - "Secant line rendered as a continuous line that fades in, converging to the tangent."
+      - "Moving point label stays right-aligned with a downward bias to avoid curve intersection."
+    artifacts:
+      video_low_quality: "output/videos/480p15/SecantToDerivativeScene.mp4"
+      review_gif: "samples_artifacts/secant_to_derivative_review.gif"
+      review_frames:
+        - "samples_artifacts/secant_to_derivative_frame_3s.png"
+        - "samples_artifacts/secant_to_derivative_frame_6s.png"
+        - "samples_artifacts/secant_to_derivative_frame_10s.png"

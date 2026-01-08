@@ -1,5 +1,8 @@
 """Rendering utilities for Manim scenes."""
 
+import contextlib
+import io
+import logging
 import subprocess
 import sys
 from pathlib import Path
@@ -46,9 +49,35 @@ def render_scene(
     # Set media directory
     config.media_dir = str(output_dir)
 
-    # Render the scene
+    # Suppress Manim's verbose output
+    # Configure logging to suppress INFO/DEBUG messages from Manim
+    manim_logger = logging.getLogger("manim")
+    original_level = manim_logger.level
+    manim_logger.setLevel(logging.ERROR)
+    
+    # Also try to set config verbosity if available
+    original_verbosity = getattr(config, "verbosity", None)
+    try:
+        config.verbosity = "ERROR"
+    except (AttributeError, ValueError):
+        pass
+
+    # Render the scene with suppressed output
+    # Redirect stdout to suppress print statements, but keep stderr for critical errors
     scene = scene_class()
-    scene.render()
+    stdout_capture = io.StringIO()
+    with contextlib.redirect_stdout(stdout_capture):
+        scene.render()
+    
+    # Restore original logging level
+    manim_logger.setLevel(original_level)
+    
+    # Restore original verbosity if it was set
+    if original_verbosity is not None:
+        try:
+            config.verbosity = original_verbosity
+        except (AttributeError, ValueError):
+            pass
 
     # Find the output file
     # Manim creates files in output_dir/videos/<resolution>/<scene_name>.mp4
