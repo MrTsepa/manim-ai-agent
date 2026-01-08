@@ -1,8 +1,8 @@
 """Configuration settings for AI Video Studio."""
 
 import os
+from functools import lru_cache
 from pathlib import Path
-from typing import Optional
 
 from dotenv import load_dotenv
 
@@ -36,13 +36,12 @@ class Settings:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
 
-_settings: Optional[Settings] = None
-
-
+@lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    """Get the global settings instance."""
-    global _settings
-    if _settings is None:
-        _settings = Settings()
-    return _settings
+    """
+    Get the cached settings instance.
 
+    Uses lru_cache for thread-safe singleton pattern.
+    To reset settings in tests, call: get_settings.cache_clear()
+    """
+    return Settings()

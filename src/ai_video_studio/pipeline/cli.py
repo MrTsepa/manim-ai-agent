@@ -3,6 +3,9 @@
 import argparse
 import sys
 from pathlib import Path
+from typing import Type
+
+from manim import Scene
 
 from ai_video_studio.config import get_settings
 from ai_video_studio.manim_scenes.demo_scenes import (
@@ -18,18 +21,33 @@ from ai_video_studio.core.scene_library import (
 )
 
 
-def render_demo(args: argparse.Namespace) -> int:
-    """Render the demo scene."""
+def _render_scene_command(
+    scene_class: Type[Scene],
+    scene_name: str,
+    args: argparse.Namespace,
+) -> int:
+    """
+    Generic render command handler.
+
+    Args:
+        scene_class: The Manim Scene class to render
+        scene_name: Human-readable name for logging
+        args: Parsed CLI arguments
+
+    Returns:
+        Exit code (0 for success, 1 for failure)
+    """
     try:
         output_dir = Path(args.output_dir) if args.output_dir else None
         quality = args.quality if args.quality else None
+        settings = get_settings()
 
-        print(f"Rendering demo scene...")
-        print(f"Output directory: {output_dir or get_settings().output_dir}")
-        print(f"Quality: {quality or get_settings().manim_quality}")
+        print(f"Rendering {scene_name}...")
+        print(f"Output directory: {output_dir or settings.output_dir}")
+        print(f"Quality: {quality or settings.manim_quality}")
 
         video_path = render_scene(
-            FunctionDemoScene,
+            scene_class,
             output_dir=output_dir,
             quality=quality,
             preview=args.preview,
@@ -41,81 +59,26 @@ def render_demo(args: argparse.Namespace) -> int:
     except Exception as e:
         print(f"✗ Error rendering scene: {e}", file=sys.stderr)
         return 1
+
+
+def render_demo(args: argparse.Namespace) -> int:
+    """Render the demo scene."""
+    return _render_scene_command(FunctionDemoScene, "demo scene", args)
 
 
 def render_loss_descent(args: argparse.Namespace) -> int:
     """Render the loss descent demo scene."""
-    try:
-        output_dir = Path(args.output_dir) if args.output_dir else None
-        quality = args.quality if args.quality else None
-
-        print(f"Rendering loss descent demo scene...")
-        print(f"Output directory: {output_dir or get_settings().output_dir}")
-        print(f"Quality: {quality or get_settings().manim_quality}")
-
-        video_path = render_scene(
-            LossDescentDemoScene,
-            output_dir=output_dir,
-            quality=quality,
-            preview=args.preview,
-        )
-
-        print(f"✓ Successfully rendered to: {video_path}")
-        return 0
-
-    except Exception as e:
-        print(f"✗ Error rendering scene: {e}", file=sys.stderr)
-        return 1
+    return _render_scene_command(LossDescentDemoScene, "loss descent demo scene", args)
 
 
 def render_parabolic_motion(args: argparse.Namespace) -> int:
     """Render the parabolic motion scene with kinematics plots."""
-    try:
-        output_dir = Path(args.output_dir) if args.output_dir else None
-        quality = args.quality if args.quality else None
-
-        print("Rendering parabolic motion scene...")
-        print(f"Output directory: {output_dir or get_settings().output_dir}")
-        print(f"Quality: {quality or get_settings().manim_quality}")
-
-        video_path = render_scene(
-            ParabolicMotionScene,
-            output_dir=output_dir,
-            quality=quality,
-            preview=args.preview,
-        )
-
-        print(f"✓ Successfully rendered to: {video_path}")
-        return 0
-
-    except Exception as e:
-        print(f"✗ Error rendering scene: {e}", file=sys.stderr)
-        return 1
+    return _render_scene_command(ParabolicMotionScene, "parabolic motion scene", args)
 
 
 def render_pythagorean_theorem(args: argparse.Namespace) -> int:
     """Render the Pythagorean theorem scene."""
-    try:
-        output_dir = Path(args.output_dir) if args.output_dir else None
-        quality = args.quality if args.quality else None
-
-        print("Rendering Pythagorean theorem scene...")
-        print(f"Output directory: {output_dir or get_settings().output_dir}")
-        print(f"Quality: {quality or get_settings().manim_quality}")
-
-        video_path = render_scene(
-            PythagoreanTheoremScene,
-            output_dir=output_dir,
-            quality=quality,
-            preview=args.preview,
-        )
-
-        print(f"✓ Successfully rendered to: {video_path}")
-        return 0
-
-    except Exception as e:
-        print(f"✗ Error rendering scene: {e}", file=sys.stderr)
-        return 1
+    return _render_scene_command(PythagoreanTheoremScene, "Pythagorean theorem scene", args)
 
 
 def list_reference_scenes(args: argparse.Namespace) -> int:

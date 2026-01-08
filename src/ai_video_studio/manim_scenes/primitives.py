@@ -1,7 +1,7 @@
 """Reusable visual primitives for Manim scenes."""
 
 import numpy as np
-from manim import Arrow3D, BLUE_E, BLUE_C, BLUE_D, RED, Sphere, Surface, YELLOW, ORANGE, Dot3D
+from manim import Arrow3D, BLUE_C, BLUE_D, BLUE_E, ORANGE, RED, Sphere, Surface
 
 
 def create_paraboloid_surface(x_range=(-3, 3), y_range=(-3, 3), resolution=48, color=BLUE_E):
@@ -35,29 +35,26 @@ def create_paraboloid_surface(x_range=(-3, 3), y_range=(-3, 3), resolution=48, c
     return surface
 
 
-def create_ball(position=(0, 0, 0), color=YELLOW, radius=0.2):
+def create_ball(position=(0, 0, 0), color=ORANGE, radius=0.2):
     """
     Create a 3D ball (sphere) to represent a point on the loss landscape.
-    
+
     Args:
         position: 3D position as (x, y, z) tuple
-        color: Color of the ball
+        color: Color of the ball (default: ORANGE for visibility)
         radius: Radius of the sphere
-        
+
     Returns:
         Sphere: A Manim Sphere object with enhanced visibility
     """
-    # Create a more visible ball with solid color
     ball = Sphere(
         radius=radius,
         resolution=(24, 24),
-        fill_color=ORANGE,
+        fill_color=color,
         fill_opacity=1.0,
-        stroke_color=YELLOW,
+        stroke_color=color,
         stroke_width=1,
     ).move_to(position)
-    # Set the color properly
-    ball.set_color(ORANGE)
     return ball
 
 

@@ -2,11 +2,17 @@
 
 from typing import Any
 
-import numpy as np
 from manim import (
-    BLUE_E, Create, FadeIn, FadeOut, RED, ThreeDAxes, ThreeDScene, 
-    YELLOW, WHITE, Text, Write, DEGREES, UP, DOWN, LEFT, RIGHT, ORIGIN,
-    TracedPath, rate_functions,
+    BLUE_E,
+    DEGREES,
+    FadeIn,
+    FadeOut,
+    RED,
+    ThreeDAxes,
+    ThreeDScene,
+    TracedPath,
+    YELLOW,
+    rate_functions,
 )
 
 from ai_video_studio.core.types import SceneActionSpec, SceneObjectSpec, SceneSpec

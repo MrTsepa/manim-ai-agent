@@ -1,10 +1,9 @@
-"""Demo scenes for testing Manim integration.
+"""Individual scene implementations.
 
-This module re-exports all demo scenes for backward compatibility.
-The actual implementations are now in the `scenes/` subpackage.
+This module contains all scene classes organized by topic/functionality.
+Each scene is in its own module for better maintainability.
 """
 
-# Re-export all scenes from the scenes subpackage for backward compatibility
 from ai_video_studio.manim_scenes.scenes.function_demo import FunctionDemoScene
 from ai_video_studio.manim_scenes.scenes.loss_descent import (
     LossDescentDemoScene,

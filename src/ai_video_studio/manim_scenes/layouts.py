@@ -3,8 +3,11 @@
 from typing import Optional
 
 from manim import (
-    DOWN, ORIGIN, UP, WHITE, Text, VGroup, Write, 
-    Rectangle, BLACK, config, FadeIn,
+    Rectangle,
+    Text,
+    WHITE,
+    Write,
+    config,
 )
 
 
