@@ -1,0 +1,46 @@
+version: 1
+reference_scenes:
+  - id: parabolic_motion_v1
+    title: "Parabolic Motion"
+    scene_class: "ParabolicMotionScene"
+    module: "ai_video_studio.manim_scenes.demo_scenes"
+    source_file: "src/ai_video_studio/manim_scenes/demo_scenes.py"
+    tags:
+      - reference
+      - layout:side-by-side
+      - plots:kinematics
+      - alignment:axes
+      - title:top-center
+    quality_notes:
+      - "Clean right-side plot alignment and label column alignment."
+      - "Balanced left trajectory with right stacked plots."
+      - "Title has comfortable spacing from top plot."
+    artifacts:
+      video_low_quality: "output/videos/480p15/ParabolicMotionScene.mp4"
+      review_gif: "samples_artifacts/parabolic_motion_review.gif"
+      review_frames:
+        - "samples_artifacts/parabolic_frame_3s.png"
+        - "samples_artifacts/parabolic_frame_6s.png"
+        - "samples_artifacts/parabolic_frame_10s.png"
+  - id: pythagorean_theorem_v1
+    title: "Pythagorean Theorem"
+    scene_class: "PythagoreanTheoremScene"
+    module: "ai_video_studio.manim_scenes.demo_scenes"
+    source_file: "src/ai_video_studio/manim_scenes/demo_scenes.py"
+    tags:
+      - sample
+      - geometry
+      - layout:split
+      - title:top-center
+      - equation
+      - highlight
+    quality_notes:
+      - "Centered layout with title clearance."
+      - "Squares and equation highlight in sync."
+      - "Diagram labels sized to match equation."
+    artifacts:
+      video_low_quality: "output/videos/480p15/PythagoreanTheoremScene.mp4"
+      review_gif: "samples_artifacts/pythagorean_review.gif"
+      review_frames:
+        - "samples_artifacts/pythagorean_frame_2s.png"
+        - "samples_artifacts/pythagorean_frame_5s.png"

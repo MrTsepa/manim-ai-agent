@@ -46,17 +46,19 @@ Rendered videos are named after their scene class (e.g., `LossDescentDemoScene.m
 
 ### Agent Workspace
 
-**Use the `agent_workspace/` folder for all intermediate and temporary files.**
+**Use the `agent_scratchpad/` folder for all intermediate and temporary files.**
+This folder is ephemeral and should not be relied on across sessions.
 
 This keeps working files separate from the source code repository:
-- Store scratch files, experiments, and drafts in `agent_workspace/`
-- Store generated assets being reviewed in `agent_workspace/`
-- Store temporary processing outputs in `agent_workspace/`
-- Never commit `agent_workspace/` contents to version control
+- Store scratch files, experiments, and drafts in `agent_scratchpad/`
+- Store generated assets being reviewed in `agent_scratchpad/`
+- Store temporary processing outputs in `agent_scratchpad/`
+- Never commit `agent_scratchpad/` contents to version control
+- Store approved sample artifacts in `samples_artifacts/` (not in the scratchpad)
 
 ```bash
 # Create workspace if it doesn't exist
-mkdir -p agent_workspace
+mkdir -p agent_scratchpad
 ```
 
 ## Video Review Workflow
@@ -67,7 +69,7 @@ When reviewing rendered videos, create a low-resolution GIF to analyze the outpu
 
 ```bash
 # Convert video to low-res GIF for review (recommended: 320px width, 10fps)
-ffmpeg -i output/videos/480p15/YourScene.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y agent_workspace/review.gif
+ffmpeg -i output/videos/480p15/YourScene.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y agent_scratchpad/review.gif
 ```
 
 ### What to Review
@@ -89,6 +91,17 @@ When processing the GIF for review, evaluate:
 5. Re-render and review again
 6. Once satisfied, stop the process and ask the user if he wants to render higher quality video
 
+## Reference Quality Example (Approved)
+
+The Parabolic Motion scene (trajectory + position/velocity/acceleration plots) is an approved reference
+for high-quality layout, alignment, and visual balance. Use it as a style benchmark for future scenes:
+- File: `src/ai_video_studio/manim_scenes/demo_scenes.py`
+- Scene class: `ParabolicMotionScene`
+- Latest low-quality render: `output/videos/480p15/ParabolicMotionScene.mp4`
+- Review assets: `samples_artifacts/parabolic_motion_review.gif` and
+  `samples_artifacts/parabolic_frame_3s.png`, `samples_artifacts/parabolic_frame_6s.png`,
+  `samples_artifacts/parabolic_frame_10s.png`
+
 ## Development Workflow
 
 1. Run `uv sync`
@@ -97,6 +110,8 @@ When processing the GIF for review, evaluate:
 4. Render and review video output (create GIF for analysis)
 5. Check for linting errors
 6. Commit changes
+
+See `docs/VIDEO_CREATION_SCENARIO.md` for the full end-to-end video creation loop.
 
 ## Manim 3D Scene Tips
 

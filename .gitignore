@@ -44,10 +44,9 @@ output/
 *.gif
 
 # Agent workspace (intermediate files)
-agent_workspace/*
-!agent_workspace/.gitkeep
+agent_scratchpad/*
+!agent_scratchpad/.gitkeep
 
 # OS
 .DS_Store
 Thumbs.db
-

@@ -4,6 +4,8 @@ from ai_video_studio.manim_scenes.base_scene import SpecDrivenScene
 from ai_video_studio.manim_scenes.demo_scenes import (
     FunctionDemoScene,
     LossDescentDemoScene,
+    ParabolicMotionScene,
+    PythagoreanTheoremScene,
     get_loss_descent_narration_segment,
     get_loss_descent_scene_spec,
 )
@@ -16,6 +18,8 @@ __all__ = [
     "SpecDrivenScene",
     "FunctionDemoScene",
     "LossDescentDemoScene",
+    "ParabolicMotionScene",
+    "PythagoreanTheoremScene",
     "get_loss_descent_scene_spec",
     "get_loss_descent_narration_segment",
     "TitledSceneLayout",
