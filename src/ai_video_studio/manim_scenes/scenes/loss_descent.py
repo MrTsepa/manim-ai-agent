@@ -2,6 +2,7 @@
 
 from ai_video_studio.core.types import SceneActionSpec, SceneObjectSpec, SceneSpec, ScriptSegment
 from ai_video_studio.manim_scenes.base_scene import SpecDrivenScene
+from ai_video_studio.manim_scenes.registry import register_scene
 
 
 def get_loss_descent_narration_segment() -> ScriptSegment:
@@ -127,6 +128,15 @@ def get_loss_descent_scene_spec() -> SceneSpec:
     )
 
 
+@register_scene(
+    id="loss_descent_v1",
+    title="Loss Descent Demo",
+    tags=["demo", "3d", "optimization", "machine-learning"],
+    quality_notes=[
+        "Visualizes gradient descent as a ball rolling downhill.",
+        "Loss = height intuition.",
+    ],
+)
 class LossDescentDemoScene(SpecDrivenScene):
     """
     A demo scene showing loss optimization as a ball rolling downhill.

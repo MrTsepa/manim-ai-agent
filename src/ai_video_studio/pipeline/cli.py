@@ -8,11 +8,19 @@ from typing import Type
 from manim import Scene
 
 from ai_video_studio.config import get_settings
+from ai_video_studio.core.agent_utils import get_agent_id, print_agent_info
 from ai_video_studio.manim_scenes.demo_scenes import (
     FunctionDemoScene,
     LossDescentDemoScene,
     ParabolicMotionScene,
     PythagoreanTheoremScene,
+)
+from ai_video_studio.manim_scenes.registry import (
+    discover_scenes,
+    get_registered_scenes,
+    get_scene_by_class_name,
+    get_scene_by_command,
+    load_metadata_files,
 )
 from ai_video_studio.pipeline.render_scenes import render_scene
 from ai_video_studio.core.scene_library import (
@@ -112,6 +120,109 @@ def list_reference_scenes(args: argparse.Namespace) -> int:
     except Exception as e:
         print(f"✗ Error loading scene library: {e}", file=sys.stderr)
         return 1
+
+
+def render_dynamic_scene(args: argparse.Namespace) -> int:
+    """Render a scene using dynamic discovery (no central registration needed).
+
+    This command finds scenes by class name or CLI command without requiring
+    them to be imported in cli.py. Perfect for multiagent workflows.
+    """
+    try:
+        # Discover all registered scenes
+        discover_scenes()
+        load_metadata_files()
+
+        scene_name = args.scene
+
+        # Try to find by class name first
+        metadata = get_scene_by_class_name(scene_name)
+
+        # Then try by CLI command
+        if metadata is None:
+            metadata = get_scene_by_command(scene_name)
+
+        if metadata is None:
+            # List available scenes to help the user
+            all_scenes = get_registered_scenes()
+            print(f"✗ Scene '{scene_name}' not found.", file=sys.stderr)
+            if all_scenes:
+                print("\nAvailable scenes:", file=sys.stderr)
+                for meta in all_scenes.values():
+                    print(
+                        f"  - {meta.scene_class.__name__} (command: {meta.cli_command})",
+                        file=sys.stderr,
+                    )
+            else:
+                print(
+                    "\nNo scenes registered. Use @register_scene decorator or .meta.yaml files.",
+                    file=sys.stderr,
+                )
+            return 1
+
+        output_dir = Path(args.output_dir) if args.output_dir else None
+        quality = args.quality if args.quality else None
+        settings = get_settings()
+
+        print(f"Rendering {metadata.title} ({metadata.scene_class.__name__})...")
+        print(f"Output directory: {output_dir or settings.output_dir}")
+        print(f"Quality: {quality or settings.manim_quality}")
+
+        video_path = render_scene(
+            metadata.scene_class,
+            output_dir=output_dir,
+            quality=quality,
+            preview=args.preview,
+        )
+
+        print(f"✓ Successfully rendered to: {video_path}")
+        return 0
+
+    except Exception as e:
+        print(f"✗ Error rendering scene: {e}", file=sys.stderr)
+        return 1
+
+
+def list_available_scenes(args: argparse.Namespace) -> int:
+    """List all available scenes from dynamic discovery."""
+    try:
+        # Discover all registered scenes
+        discover_scenes()
+        load_metadata_files()
+
+        all_scenes = get_registered_scenes()
+
+        if not all_scenes:
+            print("No scenes registered.")
+            print("\nTo register scenes, use the @register_scene decorator:")
+            print("  from ai_video_studio.manim_scenes.registry import register_scene")
+            print()
+            print('  @register_scene(id="my_scene", title="My Scene")')
+            print("  class MyScene(Scene):")
+            print("      ...")
+            return 0
+
+        print(f"Found {len(all_scenes)} registered scene(s):\n")
+        for metadata in all_scenes.values():
+            print(f"  {metadata.scene_class.__name__}")
+            print(f"    ID: {metadata.id}")
+            print(f"    Title: {metadata.title}")
+            print(f"    Command: render-scene {metadata.cli_command}")
+            if metadata.tags:
+                print(f"    Tags: {', '.join(metadata.tags)}")
+            print()
+
+        return 0
+
+    except Exception as e:
+        print(f"✗ Error discovering scenes: {e}", file=sys.stderr)
+        return 1
+
+
+def agent_info_command(args: argparse.Namespace) -> int:
+    """Print agent context information for debugging."""
+    print_agent_info()
+    return 0
 
 
 def main() -> int:
@@ -230,6 +341,45 @@ def main() -> int:
         help="Show notes and artifacts",
     )
 
+    # render-scene command (dynamic discovery - multiagent friendly)
+    render_scene_parser = subparsers.add_parser(
+        "render-scene",
+        help="Render a scene by name using dynamic discovery (multiagent-friendly)",
+    )
+    render_scene_parser.add_argument(
+        "scene",
+        type=str,
+        help="Scene class name or CLI command (e.g., ParabolicMotionScene or parabolic-motion)",
+    )
+    render_scene_parser.add_argument(
+        "--output-dir",
+        type=str,
+        help="Output directory for rendered videos (default: from settings)",
+    )
+    render_scene_parser.add_argument(
+        "--quality",
+        type=str,
+        choices=["low_quality", "medium_quality", "high_quality", "production_quality"],
+        help="Manim quality preset (default: from settings)",
+    )
+    render_scene_parser.add_argument(
+        "--preview",
+        action="store_true",
+        help="Open the video after rendering",
+    )
+
+    # list-scenes command (dynamic discovery)
+    list_scenes_parser = subparsers.add_parser(
+        "list-scenes",
+        help="List all available scenes from dynamic discovery",
+    )
+
+    # agent-info command
+    agent_info_parser = subparsers.add_parser(
+        "agent-info",
+        help="Print agent context information (ID, scratchpad path, etc.)",
+    )
+
     args = parser.parse_args()
 
     if not args.command:
@@ -246,6 +396,12 @@ def main() -> int:
         return render_pythagorean_theorem(args)
     elif args.command == "list-reference-scenes":
         return list_reference_scenes(args)
+    elif args.command == "render-scene":
+        return render_dynamic_scene(args)
+    elif args.command == "list-scenes":
+        return list_available_scenes(args)
+    elif args.command == "agent-info":
+        return agent_info_command(args)
 
     print(f"Unknown command: {args.command}", file=sys.stderr)
     return 1

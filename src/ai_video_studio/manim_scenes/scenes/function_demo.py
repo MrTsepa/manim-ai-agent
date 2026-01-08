@@ -9,7 +9,15 @@ from manim import (
     TracedPath,
 )
 
+from ai_video_studio.manim_scenes.registry import register_scene
 
+
+@register_scene(
+    id="function_demo_v1",
+    title="Function Demo",
+    tags=["demo", "simple", "2d", "animation"],
+    quality_notes=["Basic demo scene for testing the rendering pipeline."],
+)
 class FunctionDemoScene(Scene):
     """A simple demo scene showing a function on axes with a point moving along the curve."""
 

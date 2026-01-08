@@ -2,6 +2,42 @@
 
 This document provides instructions for AI coding agents working on this project.
 
+## Multiagent Collaboration
+
+**⚠️ Multiple agents may work on this codebase simultaneously.**
+
+See `docs/MULTIAGENT_WORKFLOW.md` for detailed guidelines on:
+- Agent identity and workspace isolation
+- Avoiding merge conflicts in central files
+- Scene registration without touching `cli.py`
+- Branch strategy and merge order
+
+### Quick Start for Multiagent Work
+
+1. Set a unique agent ID at the start of your session:
+   ```bash
+   export AGENT_ID="my-scene-name"
+   ```
+
+2. Use namespaced scratchpad:
+   ```bash
+   mkdir -p agent_scratchpad/${AGENT_ID}
+   ```
+
+3. Register new scenes with `@register_scene` decorator instead of editing `cli.py`:
+   ```python
+   from ai_video_studio.manim_scenes.registry import register_scene
+
+   @register_scene(id="my_scene_v1", title="My Scene", tags=["geometry"])
+   class MyScene(Scene):
+       ...
+   ```
+
+4. Use dynamic rendering:
+   ```bash
+   uv run python -m ai_video_studio.pipeline.cli render-scene MyScene --quality low_quality
+   ```
+
 ## UV Environment Setup
 
 **Always use the uv-managed environment when working on this project.**
@@ -68,8 +104,12 @@ When reviewing rendered videos, create a low-resolution GIF to analyze the outpu
 ### Creating Review GIFs
 
 ```bash
+# Use namespaced paths for multiagent work
+SCRATCH=agent_scratchpad/${AGENT_ID:-default}
+mkdir -p $SCRATCH
+
 # Convert video to low-res GIF for review (recommended: 320px width, 10fps)
-ffmpeg -i output/videos/480p15/YourScene.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y agent_scratchpad/review.gif
+ffmpeg -i output/videos/480p15/YourScene.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y $SCRATCH/review.gif
 ```
 
 ### What to Review

@@ -26,7 +26,19 @@ from manim import (
     YELLOW,
 )
 
+from ai_video_studio.manim_scenes.registry import register_scene
 
+
+@register_scene(
+    id="parabolic_motion_v1",
+    title="Parabolic Motion",
+    tags=["reference", "physics", "kinematics", "layout:side-by-side"],
+    quality_notes=[
+        "Clean right-side plot alignment and label column alignment.",
+        "Balanced left trajectory with right stacked plots.",
+        "Title has comfortable spacing from top plot.",
+    ],
+)
 class ParabolicMotionScene(Scene):
     """A demo scene showing a projectile following a parabolic arc with kinematics plots."""
 

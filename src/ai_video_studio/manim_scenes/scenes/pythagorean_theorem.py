@@ -26,7 +26,19 @@ from manim import (
     Write,
 )
 
+from ai_video_studio.manim_scenes.registry import register_scene
 
+
+@register_scene(
+    id="pythagorean_theorem_v1",
+    title="Pythagorean Theorem",
+    tags=["sample", "geometry", "layout:split", "equation", "highlight"],
+    quality_notes=[
+        "Centered layout with title clearance.",
+        "Squares and equation highlight in sync.",
+        "Diagram labels sized to match equation.",
+    ],
+)
 class PythagoreanTheoremScene(Scene):
     """A scene illustrating the Pythagorean theorem with squares on a right triangle."""
 
