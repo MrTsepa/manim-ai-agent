@@ -44,7 +44,7 @@ mkdir -p agent_scratchpad/${AGENT_ID:-default}
    - Use namespaced paths (set `SCRATCH=agent_scratchpad/${AGENT_ID:-default}`):
    - Make a low-res GIF for fast review:
      - `ffmpeg -loglevel error -i output/videos/480p15/<Scene>.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y $SCRATCH/review.gif`
-   - Extract key frames (e.g., 3s, 6s, 10s) when camera or motion changes:
+   - Extract up to 10 key frames (e.g., 1s, 2s, 3s...) for example when camera or motion changes:
      - `ffmpeg -loglevel error -y -ss 00:00:03 -i output/videos/480p15/<Scene>.mp4 -vframes 1 -update 1 $SCRATCH/frame_3s.png`
      - `ffmpeg -loglevel error -y -ss 00:00:06 -i output/videos/480p15/<Scene>.mp4 -vframes 1 -update 1 $SCRATCH/frame_6s.png`
      - `ffmpeg -loglevel error -y -ss 00:00:10 -i output/videos/480p15/<Scene>.mp4 -vframes 1 -update 1 $SCRATCH/frame_10s.png`
@@ -58,12 +58,20 @@ mkdir -p agent_scratchpad/${AGENT_ID:-default}
      - Transitions (clarity of changes)
    - Be specific about issues and improvements.
 
-6) **Adjust and improve**
+6) **External critique via GPT-5.2**
+   - Make an additional call to **gpt-5.2** with **high thinking** enabled.
+   - Keep **previous context** in the call so it remains a continuous conversation.
+   - Provide the review GIF/frames and ask for:
+     - A detailed critique with actionable fixes.
+     - A numeric score from **0–10**.
+   - Do not stop iterating until the score is **at least 9**.
+
+7) **Adjust and improve**
    - Make targeted changes based on the critique.
    - Repeat steps 3–6 until the result is clean and balanced.
    - Do not stop after a single iteration—keep improving.
 
-7) **Conclude the loop**
+8) **Conclude the loop**
    - When satisfied, summarize the improvements.
    - **Provide final deliverables** to the user:
      - **Video**: Link to the rendered video (e.g., `output/videos/480p15/<Scene>.mp4`)
