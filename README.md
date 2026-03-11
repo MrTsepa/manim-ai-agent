@@ -131,6 +131,10 @@ cp .env.example .env
 # Add your OpenAI API key for GPT video critique
 ```
 
+## Acknowledgements
+
+This project was heavily inspired by [TheoremExplainAgent](https://tiger-ai-lab.github.io/TheoremExplainAgent/) from TIGER-AI-Lab — a multimodal AI agent that autonomously generates Manim videos to explain mathematical theorems.
+
 ## License
 
 MIT
