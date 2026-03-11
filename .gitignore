@@ -36,12 +36,22 @@ ENV/
 *.swo
 *~
 
+# Testing / Linting
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+
 # Manim outputs
 media/
 output/
 *.mp4
 *.png
 *.gif
+
+# Node
+node_modules/
 
 # Agent workspace (intermediate files)
 agent_scratchpad/*

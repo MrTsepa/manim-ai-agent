@@ -106,4 +106,4 @@ Before presenting work to the user, verify you have:
 - **Check agent info**: `uv run python -m ai_video_studio.pipeline.cli agent-info`
 - **List discovered scenes**: `uv run python -m ai_video_studio.pipeline.cli list-scenes`
 
-See `docs/MULTIAGENT_WORKFLOW.md` for complete guidelines.
+See `AGENTS.md` for complete guidelines.

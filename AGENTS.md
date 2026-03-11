@@ -2,69 +2,31 @@
 
 This document provides instructions for AI coding agents working on this project.
 
-## Multiagent Collaboration
+## Environment Setup
 
-**⚠️ Multiple agents may work on this codebase simultaneously.**
+**Always use the uv-managed environment.**
 
-See `docs/MULTIAGENT_WORKFLOW.md` for detailed guidelines on:
-- Agent identity and workspace isolation
-- Avoiding merge conflicts in central files
-- Scene registration without touching `cli.py`
-- Branch strategy and merge order
-
-### Quick Start for Multiagent Work
-
-1. Set a unique agent ID at the start of your session:
-   ```bash
-   export AGENT_ID="my-scene-name"
-   ```
-
-2. Use namespaced scratchpad:
-   ```bash
-   mkdir -p agent_scratchpad/${AGENT_ID}
-   ```
-
-3. Register new scenes with `@register_scene` decorator instead of editing `cli.py`:
-   ```python
-   from ai_video_studio.manim_scenes.registry import register_scene
-
-   @register_scene(id="my_scene_v1", title="My Scene", tags=["geometry"])
-   class MyScene(Scene):
-       ...
-   ```
-
-4. Use dynamic rendering:
-   ```bash
-   uv run python -m ai_video_studio.pipeline.cli render-scene MyScene --quality low_quality
-   ```
-
-## UV Environment Setup
-
-**Always use the uv-managed environment when working on this project.**
-
-### Initial Setup
-
-1. Sync the environment (creates `.venv` if needed):
-   ```bash
-   uv sync
-   ```
-
-2. Install dev dependencies if needed:
-   ```bash
-   uv sync --extra dev
-   ```
-
-### Working with UV
-
-- **Always use `uv run` for Python commands**
-- When installing new dependencies, add them to `pyproject.toml` and run `uv sync`
-- The `.venv` directory is already in `.gitignore`, so it won't be committed
-
-### Testing Commands
-
-After syncing, you can test the demo scene:
 ```bash
-uv run python -m ai_video_studio.pipeline.cli render-demo --quality low_quality
+uv sync                    # Install dependencies
+uv sync --extra dev        # Install dev dependencies
+uv run <command>           # Run any Python command
+```
+
+## Creating Scenes
+
+Register new scenes with the `@register_scene` decorator — no central file edits needed:
+
+```python
+from ai_video_studio.manim_scenes.registry import register_scene
+
+@register_scene(id="my_scene_v1", title="My Scene", tags=["geometry"])
+class MyScene(Scene):
+    ...
+```
+
+Render with:
+```bash
+uv run python -m ai_video_studio.pipeline.cli render-scene MyScene --quality low_quality
 ```
 
 ## Project Structure
@@ -73,113 +35,74 @@ See `docs/AGENT_BACKBONE.md` for the complete project specification and roadmap.
 
 ### Output Directory
 
-Videos produced by the Manim integration are stored in the `output/videos/` folder:
-- `output/videos/480p15/` - Low quality renders (480p at 15fps)
-- `output/videos/720p30/` - Medium quality renders (720p at 30fps)
-- `output/videos/1080p60/` - High quality renders (1080p at 60fps)
-
-Rendered videos are named after their scene class (e.g., `LossDescentDemoScene.mp4`).
+Videos are stored in `output/videos/`:
+- `output/videos/480p15/` — Low quality (480p at 15fps)
+- `output/videos/720p30/` — Medium quality (720p at 30fps)
+- `output/videos/1080p60/` — High quality (1080p at 60fps)
 
 ### Agent Workspace
 
-**Use the `agent_scratchpad/` folder for all intermediate and temporary files.**
-This folder is ephemeral and should not be relied on across sessions.
-
-This keeps working files separate from the source code repository:
-- Store scratch files, experiments, and drafts in `agent_scratchpad/`
-- Store generated assets being reviewed in `agent_scratchpad/`
-- Store temporary processing outputs in `agent_scratchpad/`
-- Never commit `agent_scratchpad/` contents to version control
-- Store approved sample artifacts in `samples_artifacts/` (not in the scratchpad)
+Use `agent_scratchpad/` for all intermediate and temporary files.
+This folder is ephemeral and gitignored.
 
 ```bash
-# Create workspace if it doesn't exist
 mkdir -p agent_scratchpad
 ```
 
 ## Video Review Workflow
 
-When reviewing rendered videos, create a low-resolution GIF to analyze the output:
-
-### Creating Review GIFs
+Render at low quality, convert to GIF, review, iterate:
 
 ```bash
-# Use namespaced paths for multiagent work
-SCRATCH=agent_scratchpad/${AGENT_ID:-default}
-mkdir -p $SCRATCH
+# Render
+uv run python -m ai_video_studio.pipeline.cli render-scene MyScene --quality low_quality
 
-# Convert video to low-res GIF for review (recommended: 320px width, 10fps)
-ffmpeg -loglevel error -i output/videos/480p15/YourScene.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" -y $SCRATCH/review.gif
+# Convert to review GIF
+ffmpeg -loglevel error -i output/videos/480p15/MyScene.mp4 \
+  -vf "fps=10,scale=320:-1:flags=lanczos" -y agent_scratchpad/review.gif
 ```
 
 ### What to Review
 
-When processing the GIF for review, evaluate:
-- **Animations**: Timing, smoothness, and visual flow
-- **Layout**: Element positioning, spacing, and composition
-- **Text**: Readability, sizing, and placement
-- **Colors**: Contrast, consistency, and visual hierarchy
-- **Transitions**: Scene changes and object transformations
-- **Overall Quality**: Professional appearance and clarity
+- **Animations**: Timing, smoothness, visual flow
+- **Layout**: Positioning, spacing, composition
+- **Text**: Readability, sizing, placement
+- **Colors**: Contrast, consistency, hierarchy
+- **Transitions**: Scene changes and transformations
 
 ### Iterative Improvement
 
-1. Render the scene at low quality (480p15) for fast iteration
+1. Render at low quality (480p15)
 2. Generate a review GIF
-3. Analyze the output and identify issues
-4. Make code adjustments
-5. Re-render and review again
-6. Once satisfied, stop the process and ask the user if he wants to render higher quality video
-
-## Reference Quality Example (Approved)
-
-The Parabolic Motion scene (trajectory + position/velocity/acceleration plots) is an approved reference
-for high-quality layout, alignment, and visual balance. Use it as a style benchmark for future scenes:
-- File: `src/ai_video_studio/manim_scenes/demo_scenes.py`
-- Scene class: `ParabolicMotionScene`
-- Latest low-quality render: `output/videos/480p15/ParabolicMotionScene.mp4`
-- Review assets: `samples_artifacts/parabolic_motion_review.gif` and
-  `samples_artifacts/parabolic_frame_3s.png`, `samples_artifacts/parabolic_frame_6s.png`,
-  `samples_artifacts/parabolic_frame_10s.png`
-
-## Development Workflow
-
-1. Run `uv sync`
-2. Make code changes
-3. Test using CLI commands
-4. Render and review video output (create GIF for analysis)
-5. Check for linting errors
-6. Commit changes
+3. Analyze and identify issues
+4. Fix code
+5. Re-render and review
+6. Once satisfied, ask the user if they want a higher quality render
 
 See `docs/VIDEO_CREATION_SCENARIO.md` for the full end-to-end video creation loop.
 
-## Manim 3D Scene Tips
+## Reference Example
 
-### Coordinate System in 3D Scenes
+The `ParabolicMotionScene` is an approved reference for layout and visual quality:
+- File: `src/ai_video_studio/manim_scenes/demo_scenes.py`
+- Artifacts: `samples_artifacts/parabolic_motion_review.gif`
 
-When working with `ThreeDScene` and overhead camera angles (phi ~70°):
+## Manim 3D Tips
 
-- **X and Y** form the horizontal plane (the "ground")
-- **Z** is the vertical axis pointing upward
-- The screen's **vertical direction** aligns more with **Z**, not Y
-- `DOWN` constant is `[0, -1, 0]` (negative Y) - this moves things horizontally in 3D space, NOT down on screen!
+### Coordinate System
 
-### Moving Content Down on Screen
+With `ThreeDScene` and overhead camera (phi ~70°):
+- X and Y form the horizontal plane
+- Z is vertical (screen up/down)
+- `DOWN` = `[0, -1, 0]` moves horizontally, NOT down on screen
 
-**Wrong approach** (shifts horizontally in 3D space):
-```python
-mobject.shift(DOWN * 2.0)  # DOWN = [0, -1, 0]
-```
-
-**Correct approach** (shifts down visually on screen):
+**Move content down on screen:**
 ```python
 import numpy as np
 mobject.shift(np.array([0, 0, -2.0]))  # Negative Z = down on screen
 ```
 
-### Title and 3D Content Separation
-
-Use `TitledSceneLayout` from `ai_video_studio.manim_scenes.layouts` to prevent title/content overlap:
+### Title + 3D Content Separation
 
 ```python
 from ai_video_studio.manim_scenes.layouts import TitledSceneLayout
@@ -188,36 +111,24 @@ class MyScene(ThreeDScene):
     def construct(self):
         layout = TitledSceneLayout(self, title="My Title")
         layout.setup()
-        
-        # Create 3D content
         surface = create_surface()
-        layout.shift_content_down(surface)  # Shifts in Z direction
+        layout.shift_content_down(surface)
         self.play(Create(surface))
 ```
 
-Key points:
-- Title is fixed to camera frame using `add_fixed_in_frame_mobjects()` - it won't rotate
-- 3D content is shifted down (negative Z) by `CONTENT_SHIFT_DOWN = 2.0` units
-- This creates visual separation throughout camera rotation
-
 ### Reviewing 3D Scenes
 
-When reviewing 3D scenes, extract **multiple frames at different timestamps** to verify layout holds throughout camera rotation:
-
+Extract multiple frames to verify layout across camera angles:
 ```bash
-# Extract frames at 3s, 6s, 10s to check different camera angles
 ffmpeg -loglevel error -y -ss 00:00:03 -i video.mp4 -vframes 1 -update 1 frame_3s.png
 ffmpeg -loglevel error -y -ss 00:00:06 -i video.mp4 -vframes 1 -update 1 frame_6s.png
 ffmpeg -loglevel error -y -ss 00:00:10 -i video.mp4 -vframes 1 -update 1 frame_10s.png
 ```
 
-Camera rotation can cause 3D objects to appear at different screen positions - what looks separated in one frame may overlap in another.
+## Development Workflow
 
-### Common 3D Scene Issues
-
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Title overlaps 3D content | Content not shifted in Z | Use `TitledSceneLayout` or shift with `[0, 0, -Z]` |
-| `DOWN` shift doesn't move content down visually | `DOWN` is Y-direction, not screen-vertical | Use `np.array([0, 0, -amount])` for Z shift |
-| Overlap varies with camera angle | Camera rotation changes apparent positions | Extract multiple frames to verify separation |
-| Title rotates with scene | Title added normally | Use `add_fixed_in_frame_mobjects(title)` |
+1. `uv sync`
+2. Make code changes
+3. Render and review (create GIF)
+4. Check for linting errors
+5. Commit
