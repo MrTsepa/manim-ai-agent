@@ -16,6 +16,8 @@ An AI agent working in this repo can:
 5. **Get external critique** via GPT with vision (score 0-10)
 6. **Iterate** until the score hits 9+, then ask the user about higher quality
 
+The codebase is designed for extensibility — agents learn from past examples in the scene library, reuse proven layout helpers and primitives, and can refactor or extend shared code (layouts, primitives, registry) when existing abstractions don't fit a new scene. Each new scene makes the next one easier to build.
+
 See [`docs/VIDEO_CREATION_SCENARIO.md`](docs/VIDEO_CREATION_SCENARIO.md) for the full autonomous workflow, and [`AGENTS.md`](AGENTS.md) for agent instructions.
 
 ## Examples
