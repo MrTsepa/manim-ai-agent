@@ -1,4 +1,4 @@
-# AI Video Studio
+# Manim AI Agent
 
 A self-improving harness for AI video editing agents. Point an AI agent at this repo, and it can autonomously create, render, review, and iterate on high-quality educational math animations using [Manim](https://www.manim.community/).
 
