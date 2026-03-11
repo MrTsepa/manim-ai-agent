@@ -31,20 +31,19 @@ All scenes below were generated and refined autonomously by AI agents using this
 ## Quick Start
 
 ```bash
-# Install
 git clone https://github.com/MrTsepa/manim-ai-agent.git
 cd manim-ai-agent
 uv sync
-
-# Render a demo scene
-uv run python -m ai_video_studio.pipeline.cli render-demo --quality low_quality
-
-# List all available scenes
-uv run python -m ai_video_studio.pipeline.cli list-scenes
-
-# Render any scene by name
-uv run python -m ai_video_studio.pipeline.cli render-scene ParabolicMotionScene --quality low_quality
 ```
+
+Open the repo in a coding agent (Claude Code, Cursor, Windsurf, etc.) and ask it to create a video:
+
+```
+Create an animation showing how a Fourier series approximates a square wave.
+Use @docs/VIDEO_CREATION_SCENARIO.md as your workflow guide.
+```
+
+The agent reads `AGENTS.md`, writes a Manim scene, renders a preview, critiques the output, and iterates until the result looks good. No Manim or Python knowledge needed.
 
 Output videos are saved to `output/videos/`.
 
