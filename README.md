@@ -1,8 +1,8 @@
 # AI Video Studio
 
-A self-improving harness for AI video editing agents. Point an AI agent at this repo, and it can autonomously create, render, review, and iterate on [3Blue1Brown](https://www.3blue1brown.com/)-style educational animations using [Manim](https://www.manim.community/).
+A self-improving harness for AI video editing agents. Point an AI agent at this repo, and it can autonomously create, render, review, and iterate on high-quality educational math animations using [Manim](https://www.manim.community/).
 
-> **Status:** Currently supports individual scene generation with autonomous render-review-improve loops. Full multi-scene video generation with narration, transitions, and end-to-end pipeline is coming soon.
+> The core loop — autonomous scene generation with render-review-improve cycles — is fully working. Multi-scene stitching with narration and transitions is on the roadmap.
 
 ## How It Works
 
