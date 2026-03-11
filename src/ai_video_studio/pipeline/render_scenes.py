@@ -83,26 +83,25 @@ def render_scene(
     # Manim creates files in output_dir/videos/<resolution>/<scene_name>.mp4
     # Quality strings map to resolutions like: low_quality -> 480p15, medium_quality -> 720p30, etc.
     videos_dir = output_dir / "videos"
-    
-    # Search for the video file in the videos directory
-    # Manim creates subdirectories with resolution names (e.g., 480p15, 720p30)
+
+    # Find the most recently modified matching video (the one we just rendered)
     video_path = None
     if videos_dir.exists():
+        best_mtime = 0.0
         for resolution_dir in videos_dir.iterdir():
             if resolution_dir.is_dir():
                 potential_path = resolution_dir / f"{scene_class.__name__}.mp4"
                 if potential_path.exists():
-                    video_path = potential_path
-                    break
-    
+                    mtime = potential_path.stat().st_mtime
+                    if mtime > best_mtime:
+                        best_mtime = mtime
+                        video_path = potential_path
+
     if video_path is None or not video_path.exists():
-        # Try the direct path as fallback
-        video_path = output_dir / "videos" / quality / f"{scene_class.__name__}.mp4"
-        if not video_path.exists():
-            raise RuntimeError(
-                f"Expected video file not found. Searched in {videos_dir}. "
-                f"Manim may have saved it to a different location."
-            )
+        raise RuntimeError(
+            f"Expected video file not found. Searched in {videos_dir}. "
+            f"Manim may have saved it to a different location."
+        )
 
     return video_path
 
