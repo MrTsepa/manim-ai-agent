@@ -50,6 +50,9 @@ output/
 *.png
 *.gif
 
+# Allow sample artifacts for README
+!samples_artifacts/
+
 # Node
 node_modules/
 

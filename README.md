@@ -18,6 +18,14 @@ An AI agent working in this repo can:
 
 See [`docs/VIDEO_CREATION_SCENARIO.md`](docs/VIDEO_CREATION_SCENARIO.md) for the full autonomous workflow, and [`AGENTS.md`](AGENTS.md) for agent instructions.
 
+## Examples
+
+All scenes below were generated and refined autonomously by AI agents using this harness.
+
+| Parabolic Motion | Pythagorean Theorem | Secant to Derivative |
+|:---:|:---:|:---:|
+| ![Parabolic Motion](samples_artifacts/parabolic_motion_review.gif) | ![Pythagorean Theorem](samples_artifacts/pythagorean_review.gif) | ![Secant to Derivative](samples_artifacts/secant_to_derivative_review.gif) |
+
 ## Quick Start
 
 ```bash
