@@ -2,6 +2,8 @@
 
 A self-improving harness for AI video editing agents. Point an AI agent at this repo, and it can autonomously create, render, review, and iterate on [3Blue1Brown](https://www.3blue1brown.com/)-style educational animations using [Manim](https://www.manim.community/).
 
+> **Status:** Currently supports individual scene generation with autonomous render-review-improve loops. Full multi-scene video generation with narration, transitions, and end-to-end pipeline is coming soon.
+
 ## How It Works
 
 The core loop is: **plan → implement → render → review → critique → improve → repeat**.
