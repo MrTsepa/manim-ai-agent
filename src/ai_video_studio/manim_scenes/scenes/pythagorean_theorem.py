@@ -6,6 +6,7 @@ from manim import (
     BLUE,
     Create,
     DOWN,
+    FadeIn,
     GREEN,
     Indicate,
     LEFT,
